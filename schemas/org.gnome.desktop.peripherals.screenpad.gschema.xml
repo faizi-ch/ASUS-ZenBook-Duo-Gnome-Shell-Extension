@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.desktop.peripherals.screenpad" path="/org/gnome/desktop/peripherals/screenpad/">
+  <key type="b" name="screenpad-status">
+    <default>true</default>
+    <summary>Enable screenpad</summary>
+    <description>Enable screenpad</description>
+  </key>
+
+  </schema>
+</schemalist>
