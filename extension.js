@@ -25,7 +25,49 @@ const QuickSettingsMenu = imports.ui.main.panel.statusArea.quickSettings;
 
 const GLib = imports.gi.GLib;
 
+const ExtensionUtils = imports.misc.extensionUtils;
 
+const BrightnessSlider = GObject.registerClass(
+    class BrightnessSlider extends QuickSettings.QuickSlider {
+        _init() {
+            super._init({
+                iconName: 'display-brightness-symbolic',
+            });
+
+
+            this._sliderChangedId = this.slider.connect('notify::value',
+                this._onSliderChanged.bind(this));
+
+            this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.screenpad-control');
+
+            this._settings.connect('changed::brightness',
+                this._onSettingsChanged.bind(this));
+
+            this._onSettingsChanged();
+
+            // Set an accessible name for the slider
+            this.slider.accessible_name = 'Brightness';
+        }
+
+        _onSettingsChanged() {
+            // Prevent the slider from emitting a change signal while being updated
+            this.slider.block_signal_handler(this._sliderChangedId);
+            this.slider.value = this._settings.get_uint('brightness') / 254.0;
+            this.slider.unblock_signal_handler(this._sliderChangedId);
+        }
+
+        _onSliderChanged() {
+            // Assuming our GSettings holds values between 0..254, adjust for the
+            // slider taking values between 0..1
+
+            const sliderValue = this.slider.value;
+            const brightnessValue = Math.round(sliderValue * 254);
+            this._settings.set_uint('brightness', brightnessValue);
+            log("sliderValue: " + sliderValue);
+            log("brightnessValue: " + brightnessValue);
+            debounced_set_brightness_level(brightnessValue + 1); // +1 to avoid 0 to not let it turn off using slider
+        }
+    });
 
 const FeatureToggle = GObject.registerClass(
     class FeatureToggle extends QuickSettings.QuickToggle {
@@ -39,7 +81,8 @@ const FeatureToggle = GObject.registerClass(
 
             // Connecting the toggled signal to a callback function
             this.connect('notify::checked', (toggle) => {
-                if (toggle.checked) {
+                let isChecked = toggle.checked;
+                if (isChecked) {
                     debounced_set_brightness_level(255);
                 } else {
                     debounced_set_brightness_level(0);
@@ -54,12 +97,15 @@ const FeatureToggle = GObject.registerClass(
         }
     });
 
+
+
 const FeatureIndicator = GObject.registerClass(
     class FeatureIndicator extends QuickSettings.SystemIndicator {
         _init() {
             super._init();
 
             this.quickSettingsItems.push(new FeatureToggle());
+            this.quickSettingsItems.push(new BrightnessSlider());
 
             this.connect('destroy', () => {
                 this.quickSettingsItems.forEach(item => item.destroy());

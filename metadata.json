@@ -2,6 +2,7 @@
   "name": "ASUS ZenBook Duo Screenpad Control",
   "description": "Control the brightness of the Screenpad on ASUS ZenBook Duo",
   "shell-version": [
+    "43",
     "44"
   ],
   "url": "https://github.com/faizi-ch/ASUS-ZenBook-Duo-Gnome-Shell-Extension/",

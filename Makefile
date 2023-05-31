@@ -5,6 +5,7 @@ EXTENSION_INSTALL_DIR = "$(HOME)/.local/share/gnome-shell/extensions/screenpad-c
 FILES += extension.js
 FILES += metadata.json
 FILES += schemas/gschemas.compiled
+FILES += schemas/org.gnome.shell.extensions.screenpad-control.gschema.xml
 
 build:
 	echo Compiling schemas...

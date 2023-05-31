@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.screenpad-control" path="/org/gnome/shell/extensions/screenpad-control/">
+  <key type="b" name="screenpad-status">
+    <default>true</default>
+    <summary>Toggle screenpad</summary>
+    <description>Toggle to on/off screenpad.</description>
+  </key>
+
+  <key name="brightness" type="u">
+    <default>42</default>
+    <summary>Default brightness for 2nd screen</summary>
+  </key>
+
+  </schema>
+</schemalist>
