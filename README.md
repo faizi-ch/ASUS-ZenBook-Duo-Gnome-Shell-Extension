@@ -68,5 +68,3 @@ After installing the extension, you can log out and log back in for the changes 
 ## License
 
 This extension is licensed under the GNU General Public License. For more details, see the [LICENSE](LICENSE) file.
-
-```
